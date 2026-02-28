@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+echo "==> Building court-listener-sdk"
+go build ./cmd/court-listener-sdk
