@@ -26,6 +26,7 @@ func TestOpinionsList(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t, "opinions", "list",
 			"--api-key", "string",
+			"--max-items", "10",
 			"--id", "0",
 			"--cited-opinion", "0",
 			"--cluster", "0",

@@ -158,6 +158,10 @@ var opinionsList = cli.Command{
 			Usage:     "Filter by opinion type. Values are prefixed with numbers for sort order.\nCommon types include combined opinion, lead opinion, concurrence, dissent, etc.\n",
 			QueryPath: "type",
 		},
+		&requestflag.Flag[int64]{
+			Name:  "max-items",
+			Usage: "The maximum number of items to return (use -1 for unlimited).",
+		},
 	},
 	Action:          handleOpinionsList,
 	HideHelpCommand: true,
@@ -239,6 +243,10 @@ func handleOpinionsList(ctx context.Context, cmd *cli.Command) error {
 		return ShowJSON(os.Stdout, "opinions list", obj, format, transform)
 	} else {
 		iter := client.Opinions.ListAutoPaging(ctx, params, options...)
-		return ShowJSONIterator(os.Stdout, "opinions list", iter, format, transform)
+		maxItems := int64(-1)
+		if cmd.IsSet("max-items") {
+			maxItems = cmd.Value("max-items").(int64)
+		}
+		return ShowJSONIterator(os.Stdout, "opinions list", iter, format, transform, maxItems)
 	}
 }

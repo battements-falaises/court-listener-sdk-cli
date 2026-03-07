@@ -26,6 +26,7 @@ func TestDocketsList(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t, "dockets", "list",
 			"--api-key", "string",
+			"--max-items", "10",
 			"--id", "0",
 			"--blocked=true",
 			"--case-name", "case_name",

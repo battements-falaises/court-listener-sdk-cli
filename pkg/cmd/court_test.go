@@ -26,6 +26,7 @@ func TestCourtsList(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t, "courts", "list",
 			"--api-key", "string",
+			"--max-items", "10",
 			"--id", "id",
 			"--count", "on",
 			"--cursor", "cursor",

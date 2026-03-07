@@ -26,6 +26,7 @@ func TestClustersList(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t, "clusters", "list",
 			"--api-key", "string",
+			"--max-items", "10",
 			"--id", "0",
 			"--citation", "citation",
 			"--count", "on",
