@@ -11,8 +11,9 @@ import (
 func TestClustersRetrieve(t *testing.T) {
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "clusters", "retrieve",
+			t,
 			"--api-key", "string",
+			"clusters", "retrieve",
 			"--id", "0",
 			"--fields", "fields",
 			"--format", "json",
@@ -24,8 +25,9 @@ func TestClustersRetrieve(t *testing.T) {
 func TestClustersList(t *testing.T) {
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "clusters", "list",
+			t,
 			"--api-key", "string",
+			"clusters", "list",
 			"--max-items", "10",
 			"--id", "0",
 			"--citation", "citation",
