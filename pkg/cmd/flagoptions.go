@@ -14,11 +14,11 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/stainless-sdks/court-listener-sdk-cli/internal/apiform"
-	"github.com/stainless-sdks/court-listener-sdk-cli/internal/apiquery"
-	"github.com/stainless-sdks/court-listener-sdk-cli/internal/debugmiddleware"
-	"github.com/stainless-sdks/court-listener-sdk-cli/internal/requestflag"
-	"github.com/stainless-sdks/court-listener-sdk-go/option"
+	"github.com/battements-falaises/court-listener-sdk-cli/internal/apiform"
+	"github.com/battements-falaises/court-listener-sdk-cli/internal/apiquery"
+	"github.com/battements-falaises/court-listener-sdk-cli/internal/debugmiddleware"
+	"github.com/battements-falaises/court-listener-sdk-cli/internal/requestflag"
+	"github.com/battements-falaises/court-listener-sdk-go/option"
 
 	"github.com/goccy/go-yaml"
 	"github.com/urfave/cli/v3"

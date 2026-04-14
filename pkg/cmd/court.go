@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/stainless-sdks/court-listener-sdk-cli/internal/apiquery"
-	"github.com/stainless-sdks/court-listener-sdk-cli/internal/requestflag"
-	"github.com/stainless-sdks/court-listener-sdk-go"
-	"github.com/stainless-sdks/court-listener-sdk-go/option"
+	"github.com/battements-falaises/court-listener-sdk-cli/internal/apiquery"
+	"github.com/battements-falaises/court-listener-sdk-cli/internal/requestflag"
+	"github.com/battements-falaises/court-listener-sdk-go"
+	"github.com/battements-falaises/court-listener-sdk-go/option"
 	"github.com/tidwall/gjson"
 	"github.com/urfave/cli/v3"
 )

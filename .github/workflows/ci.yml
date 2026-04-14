@@ -15,7 +15,7 @@ on:
       - 'stl-preview-base/**'
 
 env:
-  GOPRIVATE: github.com/stainless-sdks/court-listener-sdk-go
+  GOPRIVATE: github.com/battements-falaises/court-listener-sdk-go,github.com/stainless-sdks/court-listener-sdk-go
 
 jobs:
   lint:
