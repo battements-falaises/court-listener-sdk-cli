@@ -5,7 +5,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 # Mark the necessary Go modules as private to avoid Go's proxy
-export GOPRIVATE="${GOPRIVATE:+$GOPRIVATE,}github.com/stainless-sdks/court-listener-sdk-go"
+export GOPRIVATE="${GOPRIVATE:+$GOPRIVATE,}github.com/battements-falaises/court-listener-sdk-go,github.com/stainless-sdks/court-listener-sdk-go"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'

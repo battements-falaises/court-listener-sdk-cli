@@ -10,8 +10,8 @@ import (
 	"os"
 	"slices"
 
-	"github.com/stainless-sdks/court-listener-sdk-cli/pkg/cmd"
-	"github.com/stainless-sdks/court-listener-sdk-go"
+	"github.com/battements-falaises/court-listener-sdk-cli/pkg/cmd"
+	"github.com/battements-falaises/court-listener-sdk-go"
 	"github.com/tidwall/gjson"
 	"github.com/urfave/cli/v3"
 )

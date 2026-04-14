@@ -5,7 +5,7 @@ package cmd
 import (
 	"testing"
 
-	"github.com/stainless-sdks/court-listener-sdk-cli/internal/mocktest"
+	"github.com/battements-falaises/court-listener-sdk-cli/internal/mocktest"
 )
 
 func TestClustersRetrieve(t *testing.T) {
