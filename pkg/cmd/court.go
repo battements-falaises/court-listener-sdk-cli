@@ -171,8 +171,9 @@ func handleCourtsRetrieve(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "courts retrieve", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "courts retrieve", obj, format, explicitFormat, transform)
 }
 
 func handleCourtsList(ctx context.Context, cmd *cli.Command) error {
@@ -197,6 +198,7 @@ func handleCourtsList(ctx context.Context, cmd *cli.Command) error {
 	}
 
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
 	if format == "raw" {
 		var res []byte
@@ -206,13 +208,13 @@ func handleCourtsList(ctx context.Context, cmd *cli.Command) error {
 			return err
 		}
 		obj := gjson.ParseBytes(res)
-		return ShowJSON(os.Stdout, "courts list", obj, format, transform)
+		return ShowJSON(os.Stdout, os.Stderr, "courts list", obj, format, explicitFormat, transform)
 	} else {
 		iter := client.Courts.ListAutoPaging(ctx, params, options...)
 		maxItems := int64(-1)
 		if cmd.IsSet("max-items") {
 			maxItems = cmd.Value("max-items").(int64)
 		}
-		return ShowJSONIterator(os.Stdout, "courts list", iter, format, transform, maxItems)
+		return ShowJSONIterator(os.Stdout, os.Stderr, "courts list", iter, format, explicitFormat, transform, maxItems)
 	}
 }
