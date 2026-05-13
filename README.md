@@ -4,6 +4,8 @@ The official CLI for the [Court Listener REST API](https://www.courtlistener.com
 
 It is generated with [Stainless](https://www.stainless.com/).
 
+<!-- x-release-please-start-version -->
+
 ## Installation
 
 ### Installing with Go
@@ -11,7 +13,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 To test or install the CLI locally, you need [Go](https://go.dev/doc/install) version 1.22 or later installed.
 
 ```sh
-go install 'github.com/stainless-sdks/court-listener-sdk-cli/cmd/court-listener-sdk@latest'
+go install 'github.com/battements-falaises/court-listener-sdk-cli/cmd/court-listener-sdk@latest'
 ```
 
 Once you have run `go install`, the binary is placed in your Go bin directory:
@@ -25,6 +27,8 @@ If commands aren't found after installation, add the Go bin directory to your PA
 # Add to your shell profile (.zshrc, .bashrc, etc.)
 export PATH="$PATH:$(go env GOPATH)/bin"
 ```
+
+<!-- x-release-please-end -->
 
 ### Running Locally
 
@@ -116,3 +120,23 @@ base64-encoding). Note that absolute paths will begin with `@file://` or
 ```bash
 court-listener-sdk <command> --arg @data://file.txt
 ```
+
+## Linking different Go SDK versions
+
+You can link the CLI against a different version of the Court Listener Go SDK
+for development purposes using the `./scripts/link` script.
+
+To link to a specific version from a repository (version can be a branch,
+git tag, or commit hash):
+
+```bash
+./scripts/link github.com/org/repo@version
+```
+
+To link to a local copy of the SDK:
+
+```bash
+./scripts/link ../path/to/courtlistenersdk-go
+```
+
+If you run the link script without any arguments, it will default to `../courtlistenersdk-go`.

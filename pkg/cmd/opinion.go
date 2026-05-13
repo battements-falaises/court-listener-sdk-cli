@@ -5,12 +5,11 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 
-	"github.com/stainless-sdks/court-listener-sdk-cli/internal/apiquery"
-	"github.com/stainless-sdks/court-listener-sdk-cli/internal/requestflag"
-	"github.com/stainless-sdks/court-listener-sdk-go"
-	"github.com/stainless-sdks/court-listener-sdk-go/option"
+	"github.com/battements-falaises/court-listener-sdk-cli/internal/apiquery"
+	"github.com/battements-falaises/court-listener-sdk-cli/internal/requestflag"
+	"github.com/battements-falaises/court-listener-sdk-go"
+	"github.com/battements-falaises/court-listener-sdk-go/option"
 	"github.com/tidwall/gjson"
 	"github.com/urfave/cli/v3"
 )
@@ -21,8 +20,9 @@ var opinionsRetrieve = cli.Command{
 	Suggest: true,
 	Flags: []cli.Flag{
 		&requestflag.Flag[int64]{
-			Name:     "id",
-			Required: true,
+			Name:      "id",
+			Required:  true,
+			PathParam: "id",
 		},
 		&requestflag.Flag[string]{
 			Name:      "fields",
@@ -178,8 +178,6 @@ func handleOpinionsRetrieve(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := courtlistenersdk.OpinionGetParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -190,6 +188,8 @@ func handleOpinionsRetrieve(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := courtlistenersdk.OpinionGetParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
@@ -205,8 +205,15 @@ func handleOpinionsRetrieve(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "opinions retrieve", obj, format, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
+		Title:          "opinions retrieve",
+		Transform:      transform,
+	})
 }
 
 func handleOpinionsList(ctx context.Context, cmd *cli.Command) error {
@@ -216,8 +223,6 @@ func handleOpinionsList(ctx context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
-
-	params := courtlistenersdk.OpinionListParams{}
 
 	options, err := flagOptions(
 		cmd,
@@ -230,7 +235,10 @@ func handleOpinionsList(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	params := courtlistenersdk.OpinionListParams{}
+
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
 	if format == "raw" {
 		var res []byte
@@ -240,13 +248,25 @@ func handleOpinionsList(ctx context.Context, cmd *cli.Command) error {
 			return err
 		}
 		obj := gjson.ParseBytes(res)
-		return ShowJSON(os.Stdout, "opinions list", obj, format, transform)
+		return ShowJSON(obj, ShowJSONOpts{
+			ExplicitFormat: explicitFormat,
+			Format:         format,
+			RawOutput:      cmd.Root().Bool("raw-output"),
+			Title:          "opinions list",
+			Transform:      transform,
+		})
 	} else {
 		iter := client.Opinions.ListAutoPaging(ctx, params, options...)
 		maxItems := int64(-1)
 		if cmd.IsSet("max-items") {
 			maxItems = cmd.Value("max-items").(int64)
 		}
-		return ShowJSONIterator(os.Stdout, "opinions list", iter, format, transform, maxItems)
+		return ShowJSONIterator(iter, maxItems, ShowJSONOpts{
+			ExplicitFormat: explicitFormat,
+			Format:         format,
+			RawOutput:      cmd.Root().Bool("raw-output"),
+			Title:          "opinions list",
+			Transform:      transform,
+		})
 	}
 }

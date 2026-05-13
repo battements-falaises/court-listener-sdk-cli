@@ -5,14 +5,15 @@ package cmd
 import (
 	"testing"
 
-	"github.com/stainless-sdks/court-listener-sdk-cli/internal/mocktest"
+	"github.com/battements-falaises/court-listener-sdk-cli/internal/mocktest"
 )
 
 func TestDocketsRetrieve(t *testing.T) {
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "dockets", "retrieve",
+			t,
 			"--api-key", "string",
+			"dockets", "retrieve",
 			"--id", "0",
 			"--fields", "fields",
 			"--format", "json",
@@ -24,8 +25,9 @@ func TestDocketsRetrieve(t *testing.T) {
 func TestDocketsList(t *testing.T) {
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "dockets", "list",
+			t,
 			"--api-key", "string",
+			"dockets", "list",
 			"--max-items", "10",
 			"--id", "0",
 			"--blocked=true",

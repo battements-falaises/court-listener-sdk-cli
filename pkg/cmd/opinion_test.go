@@ -5,14 +5,15 @@ package cmd
 import (
 	"testing"
 
-	"github.com/stainless-sdks/court-listener-sdk-cli/internal/mocktest"
+	"github.com/battements-falaises/court-listener-sdk-cli/internal/mocktest"
 )
 
 func TestOpinionsRetrieve(t *testing.T) {
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "opinions", "retrieve",
+			t,
 			"--api-key", "string",
+			"opinions", "retrieve",
 			"--id", "0",
 			"--fields", "fields",
 			"--format", "json",
@@ -24,8 +25,9 @@ func TestOpinionsRetrieve(t *testing.T) {
 func TestOpinionsList(t *testing.T) {
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "opinions", "list",
+			t,
 			"--api-key", "string",
+			"opinions", "list",
 			"--max-items", "10",
 			"--id", "0",
 			"--cited-opinion", "0",

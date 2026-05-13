@@ -5,12 +5,11 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 
-	"github.com/stainless-sdks/court-listener-sdk-cli/internal/apiquery"
-	"github.com/stainless-sdks/court-listener-sdk-cli/internal/requestflag"
-	"github.com/stainless-sdks/court-listener-sdk-go"
-	"github.com/stainless-sdks/court-listener-sdk-go/option"
+	"github.com/battements-falaises/court-listener-sdk-cli/internal/apiquery"
+	"github.com/battements-falaises/court-listener-sdk-cli/internal/requestflag"
+	"github.com/battements-falaises/court-listener-sdk-go"
+	"github.com/battements-falaises/court-listener-sdk-go/option"
 	"github.com/tidwall/gjson"
 	"github.com/urfave/cli/v3"
 )
@@ -21,8 +20,9 @@ var courtsRetrieve = cli.Command{
 	Suggest: true,
 	Flags: []cli.Flag{
 		&requestflag.Flag[string]{
-			Name:     "id",
-			Required: true,
+			Name:      "id",
+			Required:  true,
+			PathParam: "id",
 		},
 		&requestflag.Flag[string]{
 			Name:      "fields",
@@ -144,8 +144,6 @@ func handleCourtsRetrieve(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := courtlistenersdk.CourtGetParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -156,6 +154,8 @@ func handleCourtsRetrieve(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := courtlistenersdk.CourtGetParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
@@ -171,8 +171,15 @@ func handleCourtsRetrieve(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "courts retrieve", obj, format, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
+		Title:          "courts retrieve",
+		Transform:      transform,
+	})
 }
 
 func handleCourtsList(ctx context.Context, cmd *cli.Command) error {
@@ -182,8 +189,6 @@ func handleCourtsList(ctx context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
-
-	params := courtlistenersdk.CourtListParams{}
 
 	options, err := flagOptions(
 		cmd,
@@ -196,7 +201,10 @@ func handleCourtsList(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	params := courtlistenersdk.CourtListParams{}
+
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
 	if format == "raw" {
 		var res []byte
@@ -206,13 +214,25 @@ func handleCourtsList(ctx context.Context, cmd *cli.Command) error {
 			return err
 		}
 		obj := gjson.ParseBytes(res)
-		return ShowJSON(os.Stdout, "courts list", obj, format, transform)
+		return ShowJSON(obj, ShowJSONOpts{
+			ExplicitFormat: explicitFormat,
+			Format:         format,
+			RawOutput:      cmd.Root().Bool("raw-output"),
+			Title:          "courts list",
+			Transform:      transform,
+		})
 	} else {
 		iter := client.Courts.ListAutoPaging(ctx, params, options...)
 		maxItems := int64(-1)
 		if cmd.IsSet("max-items") {
 			maxItems = cmd.Value("max-items").(int64)
 		}
-		return ShowJSONIterator(os.Stdout, "courts list", iter, format, transform, maxItems)
+		return ShowJSONIterator(iter, maxItems, ShowJSONOpts{
+			ExplicitFormat: explicitFormat,
+			Format:         format,
+			RawOutput:      cmd.Root().Bool("raw-output"),
+			Title:          "courts list",
+			Transform:      transform,
+		})
 	}
 }
